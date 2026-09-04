@@ -4,77 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock,Paper,Scissor</title>
+    <title>Rock, Paper, Scissors</title>
 </head>
 
 <body>
 
-    <p>Open the console to see the game results !!!</p>
+    <div>
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
 
-    <script>
-        console.log("Hello World")
-    </script>
+    <div id="results"></div>
 
     <script>
         let humanScore = 0;
         let computerScore = 0;
 
+        // Select the results div
+        const results = document.querySelector("#results");
+
+        // Select the buttons
+        const rockButton = document.querySelector("#rock");
+        const paperButton = document.querySelector("#paper");
+        const scissorsButton = document.querySelector("#scissors");
+
+
         function getComputerChoice() {
             const choices = ["rock", "paper", "scissors"];
-            let index = Math.floor(Math.random() * 3);
+
+            const index = Math.floor(Math.random() * 3);
+
             return choices[index];
         }
 
-        function getHumanChoice() {
-            let userChoice = prompt("rock,paper,scissor");
-            return userChoice;
 
+        function playRound(humanChoice) {
 
-        }
+            // Stop the game if someone has already reached 5
+            if (humanScore === 5 || computerScore === 5) {
+                return;
+            }
 
-        function playRound(humanChoice, computerChoice) {
-            humanChoice = humanChoice.toLowerCase();
+            const computerChoice = getComputerChoice();
+
             if (humanChoice === computerChoice) {
-                console.log("It's a tie!");
+
+                results.textContent = "It's a tie!";
+
+            } else if (
+                (humanChoice === "rock" && computerChoice === "scissors") ||
+                (humanChoice === "paper" && computerChoice === "rock") ||
+                (humanChoice === "scissors" && computerChoice === "paper")
+            ) {
+
+                humanScore++;
+
+                results.textContent = "You win this round!";
+
             } else {
-                if (
-                    (humanChoice === "rock" && computerChoice === "scissors") ||
-                    (humanChoice === "paper" && computerChoice === "rock") ||
-                    (humanChoice === "scissors" && computerChoice === "paper")
-                ) {
-                    console.log("You win this round!");
-                    humanScore++;
-                } else {
-                    console.log("Computer wins this round!");
-                    computerScore++;
-                }
+
+                computerScore++;
+
+                results.textContent = "Computer wins this round!";
+            }
+
+
+            // Display the running score
+            results.textContent +=
+                ` You: ${humanScore} | Computer: ${computerScore}`;
+
+
+            // Check if someone has won the game
+            if (humanScore === 5) {
+
+                results.textContent += " You won the game!";
+
+            } else if (computerScore === 5) {
+
+                results.textContent += " Computer won the game!";
             }
         }
 
-        function playGame() {
-            for (let i = 1; i <= 5; i++) {
-                const computerChoice = getComputerChoice();
-                const humanChoice = getHumanChoice();
-                playRound(humanChoice, computerChoice);
-            }
 
-            if (humanScore > computerScore) {
-                console.log(`Human Wins!!!\n
-                Human Score :${humanScore}\n
-                Computer Score : ${computerScore}\n `);
-            } else if (computerScore > humanScore) {
-                console.log(`Computer Wins!!!\n
-                Computer Score : ${computerScore}\n
-                Human Score :${humanScore}\n `);
-            } else {
-                console.log(`Its a Tie!!!\n
-                Computer Score : ${computerScore}\n
-                Human Score :${humanScore}\n `);
-            }
-        }
+        // Rock button
+        rockButton.addEventListener("click", function () {
+            playRound("rock");
+        });
 
-        playGame();
+
+        // Paper button
+        paperButton.addEventListener("click", function () {
+            playRound("paper");
+        });
+
+
+        // Scissors button
+        scissorsButton.addEventListener("click", function () {
+            playRound("scissors");
+        });
+
     </script>
+
 </body>
 
 </html>
